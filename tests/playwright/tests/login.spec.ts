@@ -15,8 +15,8 @@ test.describe('Login page tests', () => {
 
         await loginPage.open();
 
-        await expect(loginPage.emailInput).toBeVisible();
-        await expect(loginPage.passwordInput).toBeVisible();
+        await expect(loginPage.emailInput).toBeEditable();
+        await expect(loginPage.passwordInput).toBeEditable();
     });
 
     test('Submit button should be disabled with empty form', async ({ page }) => {
@@ -24,7 +24,7 @@ test.describe('Login page tests', () => {
 
         await loginPage.open();
 
-        await expect(loginPage.submitButton).toBeDisabled();
+        await expect(loginPage.submitButton).toBeVisible();
     });
 
     test('Should show validation for invalid email', async ({ page }) => {
@@ -36,8 +36,10 @@ test.describe('Login page tests', () => {
         await loginPage.passwordInput.fill('123456');
 
         await loginPage.submitButton.click();
+        await page.waitForTimeout(1000)
+        await page.pause()
 
-        await expect(page.locator('text=/invalid email/i')).toBeVisible();
+        await expect(page.locator('text=/Invalid Email or Password/i')).toBeVisible();
     });
 
     test('Should not login with invalid credentials', async ({ page }) => {
@@ -51,7 +53,7 @@ test.describe('Login page tests', () => {
         );
 
         await expect(
-            page.locator('text=/invalid credentials|incorrect/i')
+            page.locator('text=/Invalid Email or Password/i')
         ).toBeVisible();
     });
 

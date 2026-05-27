@@ -6,7 +6,7 @@ export class HomePage {
 
     constructor(page: Page) {
         this.page = page;
-        this.loginButton = page.locator('a[href="/login"]');
+        this.loginButton = page.locator('body > header > div > div > a.login-btn');
     }
 
     async open() {
