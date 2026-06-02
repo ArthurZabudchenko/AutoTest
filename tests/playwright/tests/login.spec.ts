@@ -37,7 +37,7 @@ test.describe('Login page tests', () => {
 
         await loginPage.submitButton.click();
         await page.waitForTimeout(1000)
-        await page.pause()
+        // await page.pause()
 
         await expect(page.locator('text=/Invalid Email or Password/i')).toBeVisible();
     });
