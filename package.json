@@ -2,7 +2,12 @@
   "name": "javascript",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "ui": "playwright test --ui",
+    "ci": "CI=1 playwright test",
+    "report": "playwright show-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
