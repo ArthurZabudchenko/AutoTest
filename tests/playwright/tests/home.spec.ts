@@ -1,20 +1,20 @@
-import { test } from '@playwright/test';
-import { HomePage } from '../pages/HomePage';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+import { HomePage } from "../pages/HomePage";
 
-test.describe('Home page tests', () => {
+test("login flow", async ({ page }) => {
+  const login = new LoginPage(page);
+  const home = new HomePage(page);
 
-    test('Home page should open successfully', async ({ page }) => {
-        const homePage = new HomePage(page);
+  // 1. СНАЧАЛА открываем главную
+  await page.goto("https://176.trackensure.site/");
 
-        await homePage.open();
-        await homePage.verifyPageLoaded();
-    });
+  // 2. идём на login
+  await login.open();
 
-    test('Login button should be visible', async ({ page }) => {
-        const homePage = new HomePage(page);
+  // 3. логинимся
+  await login.login("5", "test");
 
-        await homePage.open();
-        await homePage.verifyLoginButtonVisible();
-    });
-
+  // 4. проверяем что попали в систему
+  await home.verifyLoaded();
 });

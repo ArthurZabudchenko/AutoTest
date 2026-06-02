@@ -1,31 +1,30 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 export class LoginPage {
-    readonly page: Page;
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly submitButton: Locator;
 
-    readonly emailInput: Locator;
-    readonly passwordInput: Locator;
-    readonly submitButton: Locator;
+  constructor(page: Page) {
+    this.page = page;
 
-    constructor(page: Page) {
-        this.page = page;
+    this.emailInput = page.getByRole("textbox", { name: "Email Address" });
+    this.passwordInput = page.getByRole("textbox", { name: "Password" });
+    this.submitButton = page.getByRole("button", { name: "Log In" });
+  }
 
-        this.emailInput = page.locator('#email');
-        this.passwordInput = page.locator('#password');
-        this.submitButton = page.locator('#submitButton');
-    }
+  async open() {
+    await this.page.goto("https://176.trackensure.site/login", );
+  }
 
-    async open() {
-        await this.page.goto('https://beta.trendyeld.com/login');
-    }
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
 
-    async login(email: string, password: string) {
-        await this.emailInput.fill(email);
-        await this.passwordInput.fill(password);
-        await this.submitButton.click();
-    }
+    // 🔥 ВАЖНО: НЕ ждём enabled (его может не быть)
+    await expect(this.submitButton).toBeVisible({ timeout: 10000 });
 
-    async verifyLoginPageLoaded() {
-        await expect(this.page).toHaveURL(/login/);
-    }
+    await this.submitButton.click();
+  }
 }
