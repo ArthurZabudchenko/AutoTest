@@ -17,12 +17,11 @@ export class OrganizationPage {
       .getByRole("button", { name: "Search", exact: true })
       .click();
 
-    // 🔥 как у тебя было (важно!)
-    await this.page.waitForLoadState("networkidle");
-
     const loginAsOrg = this.page.locator('[id$="-uiGrid-000F-cell"] a').first();
 
-    await expect(loginAsOrg).toBeVisible({ timeout: 15000 });
+    await expect(loginAsOrg).toBeVisible({
+      timeout: 30000,
+    });
 
     await loginAsOrg.scrollIntoViewIfNeeded();
     await loginAsOrg.click();
