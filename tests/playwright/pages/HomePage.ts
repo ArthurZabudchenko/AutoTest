@@ -12,19 +12,39 @@ export class HomePage {
   }
 
   async open() {
-    await this.page.goto("/", {
+    const response = await this.page.goto("/", {
       waitUntil: "domcontentloaded",
     });
+    if (!response) {
+      throw new Error("Home page navigation returned no response");
+    }
+    if (!response.ok()) {
+      throw new Error(
+        `Home page returned HTTP ${response.status()} (${response.statusText()})`,
+      );
+    }
   }
 
   async verifyLoaded() {
-    // проверяем что мы реально в приложении после редиректа/логина
-    await expect(this.menuItems.first()).toBeVisible({ timeout: 15000 });
+    await expect(
+      this.menuItems.first(),
+      "Main menu should be visible after navigation",
+    ).toBeVisible({ timeout: 15000 });
   }
 
   async openMenuByIndex(index: number) {
+    const count = await this.menuItems.count();
+    if (index < 0 || index >= count) {
+      throw new Error(
+        `Menu index ${index} out of bounds: expected 0..${count - 1} (found ${count} menu items)`,
+      );
+    }
+
     const menuItem = this.menuItems.nth(index);
-    await expect(menuItem).toBeVisible({ timeout: 15000 });
+    await expect(
+      menuItem,
+      `Menu item at index ${index} should be visible`,
+    ).toBeVisible({ timeout: 15000 });
     await menuItem.click();
   }
 }

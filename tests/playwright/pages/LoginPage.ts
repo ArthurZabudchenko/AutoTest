@@ -15,15 +15,32 @@ export class LoginPage {
   }
 
   async open() {
-    await this.page.goto("https://176.trackensure.site/login", );
+    const response = await this.page.goto(
+      "https://176.trackensure.site/login",
+    );
+    if (!response) {
+      throw new Error("Login page navigation returned no response");
+    }
+    if (!response.ok()) {
+      throw new Error(
+        `Login page returned HTTP ${response.status()} (${response.statusText()})`,
+      );
+    }
   }
 
   async login(email: string, password: string) {
+    await expect(
+      this.emailInput,
+      "Email input should be visible on login page",
+    ).toBeVisible({ timeout: 10000 });
+
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
 
-    // 🔥 ВАЖНО: НЕ ждём enabled (его может не быть)
-    await expect(this.submitButton).toBeVisible({ timeout: 10000 });
+    await expect(
+      this.submitButton,
+      "Submit button should be visible after filling credentials",
+    ).toBeVisible({ timeout: 10000 });
 
     await this.submitButton.click();
   }

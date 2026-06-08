@@ -1,25 +1,53 @@
 import { Page, expect } from "@playwright/test";
 
 export class OrganizationPage {
+  private static readonly ORGANIZATIONS_MENU_INDEX = 12;
+
   constructor(private page: Page) {}
 
   async openMenu() {
-    const menu = this.page.locator(".admin-main-screen-menu").nth(12);
+    const allMenuItems = this.page.locator(".admin-main-screen-menu");
+    const count = await allMenuItems.count();
+    if (OrganizationPage.ORGANIZATIONS_MENU_INDEX >= count) {
+      throw new Error(
+        `Organizations menu index ${OrganizationPage.ORGANIZATIONS_MENU_INDEX} out of bounds: only ${count} menu items found`,
+      );
+    }
 
-    await expect(menu).toBeVisible({ timeout: 15000 });
+    const menu = allMenuItems.nth(OrganizationPage.ORGANIZATIONS_MENU_INDEX);
+    await expect(
+      menu,
+      "Organizations menu item should be visible",
+    ).toBeVisible({ timeout: 15000 });
     await menu.click();
   }
 
   async selectOrganization(orgId: string) {
-    await this.page.getByPlaceholder("Org ID").fill(orgId);
+    const orgIdInput = this.page.getByPlaceholder("Org ID");
+    await expect(
+      orgIdInput,
+      "Org ID search input should be visible",
+    ).toBeVisible({ timeout: 10000 });
+    await orgIdInput.fill(orgId);
 
-    await this.page
-      .getByRole("button", { name: "Search", exact: true })
-      .click();
+    const searchButton = this.page.getByRole("button", {
+      name: "Search",
+      exact: true,
+    });
+    await expect(
+      searchButton,
+      "Search button should be visible",
+    ).toBeVisible({ timeout: 10000 });
+    await searchButton.click();
 
-    const loginAsOrg = this.page.locator('[id$="-uiGrid-000F-cell"] a').first();
+    const loginAsOrg = this.page
+      .locator('[id$="-uiGrid-000F-cell"] a')
+      .first();
 
-    await expect(loginAsOrg).toBeVisible({
+    await expect(
+      loginAsOrg,
+      `Organization link for org ID '${orgId}' should appear in search results`,
+    ).toBeVisible({
       timeout: 30000,
     });
 

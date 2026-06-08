@@ -47,11 +47,15 @@ test.describe("Login scenarios", () => {
 
       await login.submitButton.click();
 
-      // 🔥 проверка: остаёмся на login странице
-      await expect(page).toHaveURL(/login/, { timeout: 5000 });
+      await expect(
+        page,
+        `Should remain on login page after invalid login: ${tc.name}`,
+      ).toHaveURL(/login/, { timeout: 5000 });
 
-      // 🔥 проверка: кнопка логина всё ещё есть
-      await expect(login.submitButton).toBeVisible();
+      await expect(
+        login.submitButton,
+        "Login button should still be visible after failed login attempt",
+      ).toBeVisible();
     });
   }
 
@@ -67,9 +71,9 @@ test.describe("Login scenarios", () => {
 
     await login.submitButton.click();
 
-    // 🔥 правильная проверка ошибок REQUIRED
     await expect(
       page.locator("text=This field is required.").first(),
+      "Validation error should appear for empty form submission",
     ).toBeVisible({ timeout: 5000 });
   });
 
@@ -86,9 +90,9 @@ test.describe("Login scenarios", () => {
 
     await login.submitButton.click();
 
-    // 🔥 проверка: ошибка логина
-    await expect(page.locator("text=/Invalid Email or Password/i")).toBeVisible(
-      { timeout: 5000 },
-    );
+    await expect(
+      page.locator("text=/Invalid Email or Password/i"),
+      "Error message should appear for malicious input",
+    ).toBeVisible({ timeout: 5000 });
   });
 });
