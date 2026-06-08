@@ -15,7 +15,7 @@ export class LoginPage {
   }
 
   async open() {
-    await this.page.goto("https://176.trackensure.site/login", );
+    await this.page.goto("/login");
   }
 
   async login(email: string, password: string) {
