@@ -1,14 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
 import { OrganizationPage } from "../pages/OrganizationPage";
+import { performLogin } from "../utils/auth";
 
 test("Login and select company", async ({ page }) => {
-  const loginPage = new LoginPage(page);
+  await performLogin(page);
+
   const organizationPage = new OrganizationPage(page);
-
-  await loginPage.open();
-  await loginPage.login("5", "test");
-
   await organizationPage.openMenu();
   await organizationPage.selectOrganization("32");
 

@@ -1,12 +1,13 @@
 import { Page, expect } from "@playwright/test";
+import { SELECTORS, TIMEOUTS } from "../config/constants";
 
 export class OrganizationPage {
   constructor(private page: Page) {}
 
   async openMenu() {
-    const menu = this.page.locator(".admin-main-screen-menu").nth(12);
+    const menu = this.page.locator(SELECTORS.mainMenu).nth(12);
 
-    await expect(menu).toBeVisible({ timeout: 15000 });
+    await expect(menu).toBeVisible({ timeout: TIMEOUTS.long });
     await menu.click();
   }
 
@@ -20,7 +21,7 @@ export class OrganizationPage {
     const loginAsOrg = this.page.locator('[id$="-uiGrid-000F-cell"] a').first();
 
     await expect(loginAsOrg).toBeVisible({
-      timeout: 30000,
+      timeout: TIMEOUTS.extraLong,
     });
 
     await loginAsOrg.scrollIntoViewIfNeeded();

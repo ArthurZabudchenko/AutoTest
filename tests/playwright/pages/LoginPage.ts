@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { BASE_URL, TIMEOUTS } from "../config/constants";
 
 export class LoginPage {
   readonly page: Page;
@@ -15,15 +16,14 @@ export class LoginPage {
   }
 
   async open() {
-    await this.page.goto("https://176.trackensure.site/login", );
+    await this.page.goto(`${BASE_URL}/login`);
   }
 
   async login(email: string, password: string) {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
 
-    // 🔥 ВАЖНО: НЕ ждём enabled (его может не быть)
-    await expect(this.submitButton).toBeVisible({ timeout: 10000 });
+    await expect(this.submitButton).toBeVisible({ timeout: TIMEOUTS.medium });
 
     await this.submitButton.click();
   }

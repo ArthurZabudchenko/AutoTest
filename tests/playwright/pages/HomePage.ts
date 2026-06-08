@@ -1,14 +1,14 @@
 import { Page, Locator, expect } from "@playwright/test";
+import { SELECTORS, TIMEOUTS } from "../config/constants";
 
 export class HomePage {
   readonly page: Page;
-
   readonly menuItems: Locator;
 
   constructor(page: Page) {
     this.page = page;
 
-    this.menuItems = page.locator(".admin-main-screen-menu");
+    this.menuItems = page.locator(SELECTORS.mainMenu);
   }
 
   async open() {
@@ -18,13 +18,12 @@ export class HomePage {
   }
 
   async verifyLoaded() {
-    // проверяем что мы реально в приложении после редиректа/логина
-    await expect(this.menuItems.first()).toBeVisible({ timeout: 15000 });
+    await expect(this.menuItems.first()).toBeVisible({ timeout: TIMEOUTS.long });
   }
 
   async openMenuByIndex(index: number) {
     const menuItem = this.menuItems.nth(index);
-    await expect(menuItem).toBeVisible({ timeout: 15000 });
+    await expect(menuItem).toBeVisible({ timeout: TIMEOUTS.long });
     await menuItem.click();
   }
 }
