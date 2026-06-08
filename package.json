@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:unit": "vitest run",
+    "test:unit:coverage": "vitest run --coverage",
     "ui": "playwright test --ui",
     "ci": "CI=1 playwright test",
     "report": "playwright show-report"
@@ -15,7 +17,9 @@
   "devDependencies": {
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
+    "@vitest/coverage-v8": "^4.1.8",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
   }
 }
